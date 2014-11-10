@@ -1,7 +1,11 @@
+// Public access to private functions from go/cmd
 package pkglib
 
-// Just exported internal type from vcs.go
-type VcsCmd vcsCmd
+// Just exported internal type
+type (
+	VcsCmd      vcsCmd
+	ImportStack importStack
+)
 
 // VcsByCmd returns the version control system for the given
 // command name (hg, git, svn, bzr).
@@ -41,4 +45,29 @@ func (v *VcsCmd) Tags(dir string) ([]string, error) {
 func (v *VcsCmd) TagSync(dir, tag string) error {
 	V := vcsCmd(*v)
 	return V.tagSync(dir, tag)
+}
+
+// DownloadPaths prepares the list of paths to pass to download.
+// It expands ... patterns that can be expanded.  If there is no match
+// for a particular pattern, downloadPaths leaves it in the result list,
+// in the hope that we can figure out the repository from the
+// initial ...-free prefix.
+func DownloadPaths(args []string) []string {
+	return downloadPaths(args)
+}
+
+// ImportPaths returns the import paths to use for the given command line.
+func ImportPaths(args []string) []string {
+	return importPaths(args)
+}
+
+// download runs the download half of the get command
+// for the package named by the argument.
+func Download(arg string, stk *ImportStack, getTestDeps bool) {
+	Stk := importStack(*stk)
+	download(arg, &Stk, getTestDeps)
+}
+
+func RunInstall(cmd *Command, args []string) {
+	runInstall(cmd, args)
 }
