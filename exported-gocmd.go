@@ -1,5 +1,6 @@
 package pkglib
 
+// Just exported internal type from vcs.go
 type VcsCmd vcsCmd
 
 // VcsByCmd returns the version control system for the given
