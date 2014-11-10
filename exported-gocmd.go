@@ -10,32 +10,32 @@ func VcsByCmd(cmd string) *VcsCmd {
 	return &v
 }
 
-// ping pings to determine scheme to use.
+// Ping pings to determine scheme to use.
 func (v *VcsCmd) Ping(scheme, repo string) error {
 	V := vcsCmd(*v)
 	return V.ping(scheme, repo)
 }
 
-// create creates a new copy of repo in dir.
+// Create creates a new copy of repo in dir.
 // The parent of dir must exist; dir must not.
 func (v *VcsCmd) Create(dir, repo string) error {
 	V := vcsCmd(*v)
 	return V.create(dir, repo)
 }
 
-// download downloads any new changes for the repo in dir.
+// Download downloads any new changes for the repo in dir.
 func (v *VcsCmd) Download(dir string) error {
 	V := vcsCmd(*v)
 	return V.download(dir)
 }
 
-// tags returns the list of available tags for the repo in dir.
+// Tags returns the list of available tags for the repo in dir.
 func (v *VcsCmd) Tags(dir string) ([]string, error) {
 	V := vcsCmd(*v)
 	return V.tags(dir)
 }
 
-// tagSync syncs the repo in dir to the named tag,
+// TagSync syncs the repo in dir to the named tag,
 // which either is a tag returned by tags or is v.tagDefault.
 func (v *VcsCmd) TagSync(dir, tag string) error {
 	V := vcsCmd(*v)
