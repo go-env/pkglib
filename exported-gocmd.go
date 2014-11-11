@@ -1,6 +1,8 @@
 // Public access to private functions from go/cmd
 package pkglib
 
+import "go/token"
+
 // Just exported internal type
 type (
 	VcsCmd      vcsCmd
@@ -70,6 +72,15 @@ func Download(arg string, stk *ImportStack, getTestDeps bool) {
 
 func RunInstall(cmd *Command, args []string) {
 	runInstall(cmd, args)
+}
+
+// LoadImport scans the directory named by path, which must be an import path,
+// but possibly a local import path (an absolute file system path or one beginning
+// with ./ or ../).  A local relative path is interpreted relative to srcDir.
+// It returns a *Package describing the package found in that directory.
+func LoadImport(path string, srcDir string, stk *ImportStack, importPos []token.Position) *Package {
+	Stk := importStack(*stk)
+	return loadImport(path, srcDir, &Stk, importPos)
 }
 
 // repoRoot represents a version control system, a repo, and a root of
