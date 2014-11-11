@@ -71,3 +71,27 @@ func Download(arg string, stk *ImportStack, getTestDeps bool) {
 func RunInstall(cmd *Command, args []string) {
 	runInstall(cmd, args)
 }
+
+// repoRoot represents a version control system, a repo, and a root of
+// where to put it on disk.
+type RepoRoot struct {
+	Vcs *VcsCmd
+
+	// repo is the repository URL, including scheme
+	Repo string
+
+	// root is the import path corresponding to the root of the
+	// repository
+	Root string
+}
+
+// RepoRootForImportPath analyzes importPath to determine the
+// version control system, and code repository to use.
+func RepoRootForImportPath(importPath string) (*RepoRoot, error) {
+	if rr, err := repoRootForImportPath(importPath); err == nil {
+		vcs := VcsCmd(*rr.vcs)
+		return &RepoRoot{&vcs, rr.repo, rr.root}, nil
+	} else {
+		return &RepoRoot{}, err
+	}
+}
